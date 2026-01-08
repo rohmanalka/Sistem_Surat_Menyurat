@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\SuratModel;
 
-class User extends Authenticatable
+class UserModel extends Authenticatable
 {
+    use HasFactory;
+
     protected $table = 'users';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id_user';
     protected $fillable = [
         'name',
         'email',
@@ -20,4 +22,9 @@ class User extends Authenticatable
 
     protected $hidden = ['password'];
     protected $casts = ['password' => 'hashed'];
+
+    public function surat() : HasMany
+    {
+        return $this->hasMany(SuratModel::class);
+    }
 }
