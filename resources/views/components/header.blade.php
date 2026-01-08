@@ -1,6 +1,8 @@
+@props(['pageTitle' => 'Dashboard'])
+
 <header class="bg-white border-b px-6 py-4 flex justify-between items-center">
     <h1 class="font-semibold text-lg">
-        @yield('page-title', 'Dashboard')
+        {{ $pageTitle }}
     </h1>
 
     <form method="POST" action="{{ route('logout') }}">

@@ -1,10 +1,5 @@
-@extends('components.layout.app')
-
-@section('title', 'Dashboard Pejabat')
-@section('page-title', 'Dashboard')
-
-@section('content')
+<x-layouts.app title="Dashboard Pejabat" pageTitle="Dashboard">
     <h2 class="text-xl font-bold mb-4">
         Selamat datang, {{ auth()->user()->name }}
     </h2>
-@endsection
+</x-layouts.app>
