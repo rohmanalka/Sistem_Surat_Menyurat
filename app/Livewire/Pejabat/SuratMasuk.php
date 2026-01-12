@@ -5,6 +5,7 @@ namespace App\Livewire\Pejabat;
 use Livewire\Component;
 use App\Models\SuratModel;
 use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
 
 #[Layout('components.layouts.app', [
     'title' => 'Surat Masuk',
@@ -43,6 +44,7 @@ class SuratMasuk extends Component
             'status' => $this->status,
             'catatan' => $this->catatan,
             'approved_at' => $this->status === 'approved' ? now() : null,
+            'approved_by' => Auth::id(),
         ]);
 
         $this->showModal = false;

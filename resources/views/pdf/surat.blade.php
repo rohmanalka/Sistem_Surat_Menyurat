@@ -1,5 +1,10 @@
+@php
+    use SimpleSoftwareIO\QrCode\Facades\QrCode;
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Surat {{ $surat->nomor_surat }}</title>
@@ -45,7 +50,7 @@
 
         .judul {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .judul h2 {
@@ -82,33 +87,35 @@
         }
 
         .ttd td {
-            width: 50%;
+            width: 100%;
             text-align: center;
         }
 
         .ttd .nama {
-            margin-top: 70px;
+            margin-top: 20px;
             font-weight: bold;
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <table class="kop">
         <tr>
             <td width="15%">
                 <img src="{{ public_path('assets/LOGO_PJT.png') }}" alt="Logo">
             </td>
-            <td class="instansi" width="85%">
+            <td class="instansi" width="70%">
                 <h1>PERUM JASA TIRTA I</h1>
                 <p>Jl. Surabaya no.2A, Malang</p>
                 <p>Email: info@contoh.co.id | Telp: (021) 123456</p>
             </td>
+            <td width="15%"></td>
         </tr>
     </table>
     <hr>
     <div class="judul">
-        <h2>{{ $surat->jenisSurat->nama ?? 'SURAT' }}</h2>
+        <h2>PENGAJUAN {{ $surat->jenisSurat->nama ?? 'SURAT' }}</h2>
         <p>Nomor: {{ $surat->nomor_surat }}</p>
     </div>
     <div class="identitas">
@@ -142,14 +149,30 @@
 
     <table class="ttd">
         <tr>
-            <td></td>
             <td>
-                <p>{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
-                <p>Mengetahui,</p>
+                <p>
+                    {{ optional($surat->approved_at)->translatedFormat('d F Y') }}
+                </p>
+                <p>Disetujui Secara Elektronik</p>
+                @if ($surat->status === 'approved')
+                    <img src="data:image/svg+xml;base64,{{ base64_encode(
+                        QrCode::format('svg')->size(120)->generate(route('surat.verifikasi', $surat->id_surat)),
+                    ) }}"
+                        style="width:100px;height:100px;" alt="QR Code">
+                @endif
                 <p class="nama">
-                    {{ $surat->pejabat->nama ?? 'Nama Pejabat' }}
+                    {{ $surat->pejabat->name ?? 'Nama Pejabat' }}
                 </p>
                 <p>{{ $surat->pejabat->jabatan ?? 'Jabatan Pejabat' }}</p>
+            </td>
+
+            <td>
+                <p>Yang Mengajukan,</p>
+                <div style="height:80px"></div>
+                <p class="nama">
+                    {{ $surat->user->name ?? '-' }}
+                </p>
+                <p>{{ $surat->jabatan ?? '-' }}</p>
             </td>
         </tr>
     </table>

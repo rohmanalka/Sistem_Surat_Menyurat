@@ -50,3 +50,8 @@ Route::middleware(['auth', 'pejabat'])->group(function () {
         return Pdf::loadView('pdf.surat', compact('surat'))->stream();
     })->name('pejabat.surat.preview');
 });
+
+//QR
+Route::get('/verifikasi-surat/{surat}', function (SuratModel $surat) {
+    return view('livewire.surat.verifikasi', compact('surat'));
+})->name('surat.verifikasi');
