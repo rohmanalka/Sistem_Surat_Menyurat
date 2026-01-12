@@ -4,46 +4,33 @@ namespace App\Livewire\Surat;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
-use App\Models\JenisSuratModel;
 use App\Models\SuratModel;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 #[Layout('components.layouts.app', [
     'title' => 'Detail Surat',
     'pageTitle' => 'Detail Surat'
 ])]
-
 class ShowSurat extends Component
 {
     public SuratModel $surat;
-    public bool $showPdfModal = false;
+    public bool $showModal = true;
 
     public function mount(SuratModel $surat)
     {
-        $this->surat = $surat;
+        // route param otomatis masuk ke sini
+        $this->surat = $surat->load('jenisSurat');
+
+        // modal langsung terbuka
+        $this->showModal = true;
     }
 
-    public function previewPdf()
+    public function closeModal()
     {
-        $this->showPdfModal = true;
-    }
-
-    public function downloadPdf()
-    {
-        return response()->streamDownload(
-            fn() => print(
-                Pdf::loadView('pdf.surat', [
-                    'surat' => $this->surat
-                ])->output()
-            ),
-            'surat-' . $this->surat->nomor_surat . '.pdf'
-        );
+        return redirect()->route('surat.riwayat');
     }
 
     public function render()
     {
-        return view('livewire.surat.show_surat', [
-            'jenisSurat' => JenisSuratModel::all()
-        ]);
+        return view('livewire.surat.show_surat');
     }
 }

@@ -1,68 +1,49 @@
-<div class="max-w-4xl bg-white p-6 rounded shadow space-y-4">
-
-    <div class="flex justify-between items-center">
-        <h2 class="text-lg font-semibold">
-            Detail Surat
-        </h2>
-
-        <div class="flex gap-2">
-            <button wire:click="previewPdf" class="px-3 py-2 bg-gray-600 text-white rounded text-sm">
-                Preview PDF
-            </button>
-
-            <button wire:click="downloadPdf" class="px-3 py-2 bg-blue-600 text-white rounded text-sm">
-                Download PDF
-            </button>
-        </div>
-    </div>
-
-    <table class="w-full text-sm">
-        <tr>
-            <td class="font-medium w-40">Nomor Surat</td>
-            <td>{{ $surat->nomor_surat }}</td>
-        </tr>
-        <tr>
-            <td class="font-medium">Jenis Surat</td>
-            <td>{{ $surat->jenisSurat->nama ?? '-' }}</td>
-        </tr>
-        <tr>
-            <td class="font-medium">Tanggal</td>
-            <td>{{ $surat->tanggal_surat }}</td>
-        </tr>
-        <tr>
-            <td class="font-medium">Status</td>
-            <td>
-                <x-status_badge :status="$surat->status" />
-            </td>
-        </tr>
-    </table>
-
-    <div>
-        <p class="font-medium mb-1">Isi Surat</p>
-        <div class="border rounded p-4 bg-gray-50 whitespace-pre-line">
-            {{ $surat->isi }}
-        </div>
-    </div>
-
-
-    <div class="md:col-span-2 flex justify-end gap-2 pt-4">
-        <a href="{{ route('surat.riwayat') }}" class="px-4 py-2 rounded border">
-            Tutup
-        </a>
-    </div>
-
-    @if ($showPdfModal)
+<div>
+    @if ($showModal)
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white w-11/12 h-[90vh] rounded shadow relative">
 
-                <button wire:click="$set('showPdfModal', false)" class="absolute top-2 right-2 text-red-600">
-                    ✕
-                </button>
+            <div class="bg-white w-full max-w-6xl h-[90vh] rounded shadow flex flex-col">
 
-                <iframe src="{{ route('surat.pdf.preview', $surat->id_surat) }}" class="w-full h-full rounded">
-                </iframe>
+                {{-- Header --}}
+                <div class="flex justify-between items-center px-6 py-4 border-b">
+                    <h3 class="font-semibold text-lg">Detail Surat</h3>
+                    <button wire:click="closeModal" class="text-red-600">✕</button>
+                </div>
+
+                {{-- Content --}}
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 p-6 overflow-hidden">
+
+                    {{-- DETAIL --}}
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <p class="font-medium">Nomor Surat</p>
+                            <p>{{ $surat->nomor_surat }}</p>
+                        </div>
+
+                        <div>
+                            <p class="font-medium">Jenis Surat</p>
+                            <p>{{ $surat->jenisSurat->nama ?? '-' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="font-medium">Tanggal</p>
+                            <p>{{ $surat->tanggal_surat }}</p>
+                        </div>
+
+                        <div>
+                            <p class="font-medium">Status</p>
+                            <x-status_badge :status="$surat->status" />
+                        </div>
+                    </div>
+
+                    {{-- PDF LANGSUNG --}}
+                    <div class="md:col-span-2 border rounded overflow-hidden">
+                        <iframe src="{{ route('surat.pdf.preview', $surat->id_surat) }}" class="w-full h-full">
+                        </iframe>
+                    </div>
+
+                </div>
             </div>
         </div>
     @endif
-
 </div>

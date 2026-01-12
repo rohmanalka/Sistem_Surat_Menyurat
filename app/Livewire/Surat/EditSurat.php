@@ -15,7 +15,7 @@ use App\Models\JenisSuratModel;
 
 class EditSurat extends Component
 {
-    public SuratModel $surat;
+    public $surat;
 
     public $id_jenis_surat;
     public $judul;
