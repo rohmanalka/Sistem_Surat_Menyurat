@@ -16,6 +16,7 @@ use App\Models\JenisSuratModel;
 class EditSurat extends Component
 {
     public $surat;
+    public $jenisSurat;
 
     public $id_jenis_surat;
     public $judul;
@@ -28,9 +29,10 @@ class EditSurat extends Component
         'isi' => 'required',
         'tanggal_surat' => 'required|date',
     ];
-    
+
     public function mount(SuratModel $surat)
     {
+        $this->jenisSurat = JenisSuratModel::all();
         abort_if(
             $surat->id_user !== Auth::id() || $surat->status !== 'draft',
             403
@@ -59,8 +61,6 @@ class EditSurat extends Component
 
     public function render()
     {
-        return view('livewire.surat.edit_surat', [
-            'jenisSurat' => JenisSuratModel::all()
-        ]);
+        return view('livewire.surat.edit_surat');
     }
 }

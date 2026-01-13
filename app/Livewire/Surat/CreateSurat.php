@@ -63,14 +63,16 @@ class CreateSurat extends Component
         ]);
 
         return redirect()
-            ->route('surat.riwayat')
+            ->route('pegawai.surat.riwayat')
             ->with('success', 'Surat berhasil diajukan.');
     }
 
     private function generateNomorSurat()
     {
+        $tanggal = now()->format('d');
         $bulan = now()->format('m');
         $tahun = now()->format('Y');
+        $kode = JenisSuratModel::find($this->id_jenis_surat)->kode ?? 'SURAT';
 
         $last = SuratModel::whereYear('created_at', $tahun)
             ->orderBy('id_surat', 'desc')
@@ -79,7 +81,7 @@ class CreateSurat extends Component
         $urut = $last ? ((int) substr($last->nomor_surat, 0, 3) + 1) : 1;
         $urut = str_pad($urut, 3, '0', STR_PAD_LEFT);
 
-        return "{$urut}/SURAT/{$bulan}/{$tahun}";
+        return "{$urut}/{$kode}/{$tanggal}/{$bulan}/{$tahun}";
     }
 
 

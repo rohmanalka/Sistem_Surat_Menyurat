@@ -3,6 +3,7 @@
 namespace App\Livewire\Pejabat;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\SuratModel;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 
 class SuratMasuk extends Component
 {
+    use WithPagination;
+
     public $showModal = false;
 
     public $tinjauSurat;
@@ -54,7 +57,7 @@ class SuratMasuk extends Component
     public function render()
     {
         return view('livewire.pejabat.surat_masuk', [
-            'suratMasuk' => SuratModel::where('status', 'pending')->latest()->get(),
+            'suratMasuk' => SuratModel::where('status', ['pending', 'approved'])->latest()->get(),
         ]);
     }
 }

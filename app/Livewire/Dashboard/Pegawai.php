@@ -23,17 +23,16 @@ class Pegawai extends Component
     {
         $userId = Auth::id();
 
-        $this->pending = SuratModel::where('id_user', $userId)
-            ->where('status', 'pending')
-            ->count();
+        $counts = SuratModel::where('id_user', $userId)
+            ->selectRaw("
+        SUM(status = 'pending') as pending,
+        SUM(status = 'approved') as approved,
+        SUM(status = 'rejected') as rejected
+    ")->first();
 
-        $this->approved = SuratModel::where('id_user', $userId)
-            ->where('status', 'approved')
-            ->count();
-
-        $this->rejected = SuratModel::where('id_user', $userId)
-            ->where('status', 'rejected')
-            ->count();
+        $this->pending  = $counts->pending;
+        $this->approved = $counts->approved;
+        $this->rejected = $counts->rejected;
 
         $this->riwayatSurat = SuratModel::with('jenisSurat')
             ->where('id_user', $userId)
